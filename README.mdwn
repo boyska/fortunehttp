@@ -23,7 +23,8 @@ How To
 Dependencies
 ------------
 
-Just plain virtualenv + `requirements.txt`
+Just plain virtualenv + `requirements.txt`. But in the end, the only requirement
+is `flask`.
 
 Configuration
 --------------
