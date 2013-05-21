@@ -10,3 +10,25 @@ Details
 This does not run the `fortune-mod` executable; instead, it reimplements
 the strfile command parsing the file and caching it.
 
+How To
+=======
+
+* `mkdir fortunedbs`
+* put your favourite fortunes in that directory; note that filenames should be
+* alphanumeric if you want to change some configuration, create a
+  `custom_config.py` file and add what you want there.
+* `python2 serve.py` will justwork(tm); but if you have custom configuration,
+  run `python2 serve.py custom_config.py`
+
+Dependencies
+------------
+
+Just plain virtualenv + `requirements.txt`
+
+Configuration
+--------------
+
+* `FORTUNEPATH` defaults to `fortunedbs`
+* `DEFAULT_FORTUNE`; setting this will make the webserver respond to `/`
+  requests
+* all flask config variables: `DEBUG`, whatever...
