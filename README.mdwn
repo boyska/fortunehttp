@@ -1,0 +1,12 @@
+Fortune HTTP
+=============
+
+Serves fortune files via http.
+Both an html and a json view available. What else?
+
+Details
+--------
+
+This does not run the `fortune-mod` executable; instead, it reimplements
+the strfile command parsing the file and caching it.
+
