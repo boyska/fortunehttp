@@ -4,8 +4,10 @@ import subprocess
 import select
 import logging
 from logging import Formatter
+from functools import wraps,  update_wrapper
 
-from flask import Flask, request, abort, jsonify, render_template, Response
+from flask import Flask, request, abort, jsonify, render_template, Response, \
+        make_response
 
 from fortunedb import FortuneDB
 import random
@@ -14,9 +16,19 @@ import flask_auth
 app = Flask(__name__)
 fortunes = None
 
+def nocache(view):
+    @wraps(view)
+    def no_cache(*args, **kwargs):
+        response = make_response(view(*args, **kwargs))
+        response.headers['Cache-Control'] = \
+        'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '-1'
+        return response
+    return update_wrapper(no_cache, view)
 
-#TODO: make a blueprint
 @app.route('/fortune/<db>')
+@nocache
 def get_fortune(db):
     if not db.isalnum():
         abort(400)
@@ -26,6 +38,7 @@ def get_fortune(db):
     return render_template('fortune.html', quote=ret)
 
 @app.route('/')
+@nocache
 def default_fortune():
     if app.config['DEFAULT_FORTUNE'] is not None:
         return get_fortune(app.config['DEFAULT_FORTUNE'])
