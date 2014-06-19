@@ -8,6 +8,7 @@ from flask import Flask, request, abort, jsonify
 
 from fortunedb import FortuneDB
 import random
+from flask_auth import requires_auth
 
 app = Flask(__name__)
 fortunes = None
@@ -35,6 +36,13 @@ def request_wants_json():
     return best == 'application/json' and \
         request.accept_mimetypes[best] > \
         request.accept_mimetypes['text/html']
+
+@app.route('/fortune/<db>/new')
+@requires_auth
+def add(db):
+    quote = request.args.get('quote')
+    fortunes.add_quote(db, quote)
+    return '<pre>%s</pre>' % quote
 
 if __name__ == '__main__':
     import logging

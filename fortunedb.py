@@ -22,4 +22,8 @@ class FortuneDB(object):
     def flush(self):
         self.cache = {}
 
-
+    def add_quote(self, name, quote):
+        comp_fortune.add_fortune(os.path.join(self.basedir, name), quote,
+                verify=True)
+        if name in self.cache:
+            self.cache[name].append(quote)
