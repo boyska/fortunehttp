@@ -23,7 +23,7 @@ def get_fortune(db):
     ret = random.choice(fortunes.get(db))
     if request_wants_json():
         return jsonify({'text':ret, 'db': db})
-    return Response(ret, content_type="text/plain")
+    return render_template('fortune.html', quote=ret)
 
 @app.route('/')
 def default_fortune():
