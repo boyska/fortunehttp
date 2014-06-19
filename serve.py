@@ -66,4 +66,4 @@ if __name__ == '__main__':
         print "Htpasswd not found"
         sys.exit(2)
     flask_auth.htpasswd = htpass
-    app.run(debug=True)
+    app.run(debug=app.config['DEBUG'])
