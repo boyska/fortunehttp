@@ -1,0 +1,12 @@
+{% extends "_base.html" %}
+{% block content %}
+<header> Add to {{ db }}</header>
+<section id="content">
+  <form action="{{url_for("add", db=db)}}" method="POST">
+    <textarea rows="4" cols="90" name="quote" placeholder="<him> I talk and
+      talk and talk"></textarea>
+
+    <input type="submit" />
+  </form>
+</section>
+{% endblock %}

@@ -2,9 +2,10 @@ import os, os.path, sys
 #import json
 import subprocess
 import select
+import logging
 from logging import Formatter
 
-from flask import Flask, request, abort, jsonify
+from flask import Flask, request, abort, jsonify, render_template, Response
 
 from fortunedb import FortuneDB
 import random
@@ -22,7 +23,7 @@ def get_fortune(db):
     ret = random.choice(fortunes.get(db))
     if request_wants_json():
         return jsonify({'text':ret, 'db': db})
-    return ret
+    return Response(ret, content_type="text/plain")
 
 @app.route('/')
 def default_fortune():
@@ -37,16 +38,21 @@ def request_wants_json():
         request.accept_mimetypes[best] > \
         request.accept_mimetypes['text/html']
 
-@app.route('/fortune/<db>/new')
+@app.route('/fortune/<db>/new', methods=['POST'])
 @flask_auth.requires_auth
 def add(db):
-    quote = request.args.get('quote')
+    quote = request.form['quote']
     fortunes.add_quote(db, quote)
-    return '<pre>%s</pre>' % quote
+    return 'Added'
+
+@app.route('/add/<db>')
+def add_ui(db):
+    return render_template('add.html', db=db)
 
 if __name__ == '__main__':
     import logging
     #TODO: option for sysloghandler?
+    logging.basicConfig(level=logging.INFO)
     handler = logging.StreamHandler(sys.stderr)
     handler.setFormatter(Formatter("%(asctime)s [%(levelname)s] %(message)s"))
     app.logger.addHandler(handler)

@@ -3,3 +3,5 @@
 fortunedbs/*
 fort_ve
 .*~
+htpasswd
+.*.sw

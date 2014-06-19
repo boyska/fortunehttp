@@ -12,7 +12,7 @@ def check_auth(username, password):
     password combination is valid.
     """
     if not htpasswd:
-        log.error("htpasswd not initialized")
+        print ("htpasswd not initialized")
         return False
     ht = HtpasswdFile(htpasswd)
     return ht.check_password(username, password)
