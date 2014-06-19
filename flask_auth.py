@@ -1,12 +1,21 @@
 from functools import wraps
-from flask import request, Response
+import logging
+log = logging.getLogger('flask_auth')
 
+from flask import request, Response
+from passlib.apache import HtpasswdFile
+
+htpasswd = None
 
 def check_auth(username, password):
     """This function is called to check if a username /
     password combination is valid.
     """
-    return username == 'admin' and password == 'secret'
+    if not htpasswd:
+        log.error("htpasswd not initialized")
+        return False
+    ht = HtpasswdFile(htpasswd)
+    return ht.check_password(username, password)
 
 def authenticate():
     """Sends a 401 response that enables basic auth"""

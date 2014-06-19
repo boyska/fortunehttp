@@ -1,3 +1,3 @@
 FORTUNEPATH = './fortunedbs/'
 DEFAULT_FORTUNE = None
-
+HTPASSWD_PATH = None

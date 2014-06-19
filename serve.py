@@ -8,7 +8,7 @@ from flask import Flask, request, abort, jsonify
 
 from fortunedb import FortuneDB
 import random
-from flask_auth import requires_auth
+import flask_auth
 
 app = Flask(__name__)
 fortunes = None
@@ -38,7 +38,7 @@ def request_wants_json():
         request.accept_mimetypes['text/html']
 
 @app.route('/fortune/<db>/new')
-@requires_auth
+@flask_auth.requires_auth
 def add(db):
     quote = request.args.get('quote')
     fortunes.add_quote(db, quote)
@@ -55,4 +55,9 @@ if __name__ == '__main__':
         app.config.from_pyfile(sys.argv[1])
     app.logger.setLevel(logging.DEBUG)
     fortunes = FortuneDB(app.config['FORTUNEPATH'])
+    htpass = app.config['HTPASSWD_PATH']
+    if htpass is not None and not os.path.exists(htpass):
+        print "Htpasswd not found"
+        sys.exit(2)
+    flask_auth.htpasswd = htpass
     app.run(debug=True)
