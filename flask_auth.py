@@ -31,8 +31,11 @@ def authenticate():
 
 
 def requires_auth(f):
+
     @wraps(f)
     def decorated(*args, **kwargs):
+        if htpasswd is False:
+            return f(*args, **kwargs)
         auth = request.authorization
         if not auth or not check_auth(auth.username, auth.password):
             return authenticate()
