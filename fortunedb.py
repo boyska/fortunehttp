@@ -6,6 +6,7 @@ import os
 
 import comp_fortune
 
+
 class FortuneDB(object):
     def __init__(self, basedir):
         self.basedir = basedir
@@ -19,11 +20,14 @@ class FortuneDB(object):
             self.cache[name] = list(self.fetch_fortune(name))
         return self.cache[name]
 
+    def list(self):
+        return os.listdir(self.basedir)
+
     def flush(self):
         self.cache = {}
 
     def add_quote(self, name, quote):
         comp_fortune.add_fortune(os.path.join(self.basedir, name), quote,
-                verify=True)
+                                 verify=True)
         if name in self.cache:
             self.cache[name].append(quote)
